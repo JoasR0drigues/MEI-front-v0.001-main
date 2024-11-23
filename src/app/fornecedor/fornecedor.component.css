@@ -1,0 +1,13 @@
+.form-col img {
+    max-width: 150px; /* Define a largura máxima */
+    height: auto;     /* Mantém a proporção da imagem */
+}
+
+.codigo-input {
+    flex: 0 0 auto; /* Impede o flex de esticar o campo */
+    max-width: 10%; /* Define um limite máximo de largura */
+}
+.uppercase-input {
+    text-transform: uppercase;
+}
+

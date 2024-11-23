@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Gestor de Serviços</title>
+    <!-- Inclua o Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inclua o Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            margin-top: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-col {
+            flex: 1 1 33%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-col label {
+            font-weight: bold;
+            display: block;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        .fornecedor-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .fornecedor-col {
+            flex: 1 1 33%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .fornecedor-col label {
+            font-weight: bold;
+            display: block;
+        }
+
+        .detalhes {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #007bff;
+        }
+
+        .detalhes .detalhes-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .detalhes .detalhes-col {
+            flex: 1 1 50%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .detalhes .detalhes-col label {
+            font-weight: normal;
+            display: inline;
+        }
+
+        .btn-search {
+            background-color: #fd7e14;
+            /* Laranja Claro */
+            color: white;
+            border: none;
+        }
+
+        .btn-search:hover {
+            background-color: #e67e22;
+            /* Laranja mais escuro para hover */
+        }
+
+        .input-group-append .btn-search {
+            border-radius: 0;
+            /* Remove bordas arredondadas, se desejar */
+        }
+
+        .input-group .form-control {
+            border-radius: 0;
+            /* Remove bordas arredondadas, se desejar */
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Formulário de Coleta -->
+        <div class="form-container">
+            <form>
+                <div class="form-row">
+                    <div class="form-col text-center">
+                        <img src="assets/fornecedor.png" alt="Imagem de Fornecedor" class="img-fluid mb-3">
+                    </div>
+                </div>
+
+                <!-- Campo Código (único na linha) -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="codigo">Código</label>
+                        <input type="number" id="codigo" class="form-control codigo-input" name="codigo"
+                            [(ngModel)]="fornecedor.codigo" [readonly]="true">
+                    </div>
+                </div>
+
+                <!-- Campo CNPJ -->
+<div class="form-row">
+    <div class="form-col">
+        <label for="cnpj">CNPJ</label>
+        <div class="input-group">
+            <!-- Campo de entrada para o CNPJ com máscara -->
+            <input type="text" id="cnpj" class="form-control cnpj-input" name="cnpj"
+                [(ngModel)]="fornecedor.cnpj" (input)="aplicarMascaraCNPJ($event)"
+                (keydown)="onKeyDown($event)" maxlength="18">
+
+            <!-- Botão para realizar a busca pelo CNPJ -->
+            <div class="input-group-append">
+                <button class="btn btn-search" type="button" (click)="consultaCNPJ(fornecedor.cnpj)">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                <!-- Restante do formulário -->
+<div class="form-row">
+    <div class="form-col">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" class="form-control uppercase-input" name="nome"
+            [(ngModel)]="fornecedor.razaoSocial" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" class="form-control uppercase-input" name="telefone"
+            [(ngModel)]="fornecedor.telefone1" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="telefone2">Telefone 2</label>
+        <input type="text" id="telefone2" class="form-control uppercase-input" name="telefone2"
+            [(ngModel)]="fornecedor.telefone2" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="email">Email</label>
+        <input type="text" id="email" class="form-control uppercase-input" name="email"
+            [(ngModel)]="fornecedor.email" (input)="toUpperCase($event)">
+    </div>
+</div>
+
+<!-- Endereço Inputs -->
+<div class="form-row">
+    <div class="form-col">
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" class="form-control uppercase-input" name="logradouro"
+            [(ngModel)]="fornecedor.endereco.logradouro" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="numero">Número</label>
+        <input type="text" id="numero" class="form-control uppercase-input" name="numero"
+            [(ngModel)]="fornecedor.endereco.numero" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" class="form-control uppercase-input" name="bairro"
+            [(ngModel)]="fornecedor.endereco.bairro" (input)="toUpperCase($event)">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-col">
+        <label for="localidade">Cidade</label>
+        <input type="text" id="localidade" class="form-control uppercase-input" name="localidade"
+            [(ngModel)]="fornecedor.endereco.localidade" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="estado">Estado</label>
+        <input type="text" id="estado" class="form-control uppercase-input" name="estado"
+            [(ngModel)]="fornecedor.endereco.uf" (input)="toUpperCase($event)">
+    </div>
+    <div class="form-col">
+        <label for="cep">CEP</label>
+        <div class="input-group">
+            <input type="text" id="cep" class="form-control uppercase-input" name="cep"
+                [(ngModel)]="fornecedor.endereco.cep" (input)="toUpperCase($event)">
+                <button class="btn btn-search" type="button" (click)="consultaCEP(fornecedor.endereco.cep ?? '')">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                
+            </div>
+        </div>
+</div>
+
+
+                <!-- Botões de ação -->
+                <div class="form-row btn-container">
+                    <div class="form-col">
+                        <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary"
+                            (click)="cadastrar()">
+                        <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning"
+                            (click)="editar()">
+                        <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger"
+                            (click)="remover()">
+                        <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary"
+                            (click)="cancelar()">
+                        <br><br>
+                        <!-- Botão Voltar -->
+                        <div class="text-center">
+                            <button (click)="retornar()" class="btn btn-success">Voltar</button>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- Dados dos Fornecedores -->
+                <div class="table-container" *ngIf="fornecedores.length > 0">
+                    <div *ngFor="let fornecedor of fornecedores" class="fornecedor-row">
+                        <div class="fornecedor-col">
+                            <label>Código:</label> {{ fornecedor.codigo }}
+                        </div>
+                        <div class="fornecedor-col">
+                            <label>Nome:</label> {{ fornecedor.razaoSocial }}
+                        </div>
+                        <div class="fornecedor-col text-center">
+                            <button (click)="toggleDetalhes(fornecedor)" class="btn btn-primary">
+                                {{ fornecedor.mostrarDetalhes ? 'Ocultar Detalhes' : 'Mostrar Detalhes' }}
+                            </button>
+                            <button (click)="selecionarFornecedor(fornecedor)" class="btn btn-secondary ml-2">Selecionar</button>
+                        </div>
+                        <!-- Detalhes do fornecedor -->
+                        <div class="detalhes" *ngIf="fornecedor.mostrarDetalhes">
+                            <div class="detalhes-row">
+                                <div class="detalhes-col">
+                                    <label>Nome:</label> {{ fornecedor.razaoSocial }}
+                                </div>
+                                <div class="detalhes-col">
+                                    <label>CNPJ:</label> {{ fornecedor.cnpj }}
+                                </div>
+                            </div>
+                            <div class="detalhes-row">
+                                <div class="detalhes-col">
+                                    <label>Telefone:</label> {{ fornecedor.telefone1 }}
+                                </div>
+                                <div class="detalhes-col">
+                                    <label>Email:</label> {{ fornecedor.email }}
+                                </div>
+                            </div>
+                            <div class="detalhes-row">
+                                <div class="detalhes-col">
+                                    <label>Logradouro:</label> {{ fornecedor.endereco.logradouro }}
+                                </div>
+                                <div class="detalhes-col">
+                                    <label>Número:</label> {{ fornecedor.endereco.numero }}
+                                </div>
+                            </div>
+                            <div class="detalhes-row">
+                                <div class="detalhes-col">
+                                    <label>Bairro:</label> {{ fornecedor.endereco.bairro }}
+                                </div>
+                                <div class="detalhes-col">
+                                    <label>Cidade:</label> {{ fornecedor.endereco.localidade }}
+                                </div>
+                            </div>
+                            <div class="detalhes-row">
+                                <div class="detalhes-col">
+                                    <label>Estado:</label> {{ fornecedor.endereco.uf }}
+                                </div>
+                                <div class="detalhes-col">
+                                    <label>CEP:</label> {{ fornecedor.endereco.cep }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Inclua o Bootstrap JS e dependências -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

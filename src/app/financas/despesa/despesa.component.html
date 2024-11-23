@@ -1,0 +1,74 @@
+<div class="container">
+  <h2>Gerenciamento de Despesas</h2>
+
+  <!-- Formulário para criar uma nova despesa -->
+  <div>
+    <h3>Nova Despesa</h3>
+    <form (ngSubmit)="criarDespesa()">
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input [(ngModel)]="novaDespesa.date" name="data" class="form-control" type="datetime-local" required />
+      </div>
+      <div class="form-group">
+        <label for="valorDespesa">Valor</label>
+        <input [(ngModel)]="novaDespesa.valorDespesa" name="valorDespesa" class="form-control" type="number" required />
+      </div>
+      <div class="form-group">
+        <label for="tipoDespesa">Tipo de Despesa</label>
+        <select [(ngModel)]="novaDespesa.tipoDespesa" name="tipoDespesa" class="form-control" required>
+          <option *ngFor="let tipo of tiposDespesa" [value]="tipo">{{ tipo }}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Adicionar Despesa</button>
+    </form>
+  </div>
+
+  <!-- Lista de despesas -->
+  <div *ngIf="despesas.length > 0" class="mt-4">
+    <h3>Lista de Despesas</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Valor</th>
+          <th>Tipo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let despesa of despesas">
+          <td>{{ despesa.date }}</td>
+          <td>{{ despesa.valorDespesa | currency }}</td>
+          <td>{{ despesa.tipoDespesa }}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="despesaParaEdicao = despesa">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="excluirDespesa(despesa.idDespesa)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulário para editar despesa -->
+  <div *ngIf="despesaParaEdicao" class="mt-4">
+    <h3>Editar Despesa</h3>
+    <form (ngSubmit)="atualizarDespesa()">
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input [(ngModel)]="despesaParaEdicao.date" name="data" class="form-control" type="date" type="datetime-local" required />
+      </div>
+      <div class="form-group">
+        <label for="valorDespesa">Valor</label>
+        <input [(ngModel)]="despesaParaEdicao.valorDespesa" name="valorDespesa" class="form-control" type="number" required />
+      </div>
+      <div class="form-group">
+        <label for="tipoDespesa">Tipo de Despesa</label>
+        <select [(ngModel)]="despesaParaEdicao.tipoDespesa" name="tipoDespesa" class="form-control" required>
+          <option *ngFor="let tipo of tiposDespesa" [value]="tipo">{{ tipo }}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Atualizar Despesa</button>
+      <button type="button" class="btn btn-secondary" (click)="despesaParaEdicao = null">Cancelar</button>
+    </form>
+  </div>
+</div>

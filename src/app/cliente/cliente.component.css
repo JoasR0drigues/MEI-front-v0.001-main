@@ -1,0 +1,33 @@
+
+.form-col img {
+    max-width: 150px; /* Define a largura máxima */
+    height: auto;     /* Mantém a proporção da imagem */
+}
+
+/* Estilos para ocultar os detalhes inicialmente */
+.detalhes {
+    display: none;
+    margin-top: 10px;
+  }
+  
+  /* Mostrar os detalhes quando o botão for clicado */
+  .cliente-row .detalhes {
+    display: block;
+  }
+
+  .codigo-input {
+    flex: 0 0 auto; /* Impede o flex de esticar o campo */
+    max-width: 50%; /* Define um limite máximo de largura */
+}
+.uppercase-input {
+  text-transform: uppercase;
+}
+
+
+
+
+
+
+
+
+

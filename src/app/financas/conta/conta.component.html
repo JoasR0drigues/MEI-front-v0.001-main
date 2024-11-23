@@ -1,0 +1,105 @@
+<div class="container">
+  <h1>Gerenciamento de Contas</h1>
+
+  <!-- Exibir mensagem de erro, se houver -->
+  <div *ngIf="mensagemErro" class="alert alert-danger">
+    {{ mensagemErro }}
+  </div>
+
+  <!-- Formulário para criar uma nova conta -->
+  <form (ngSubmit)="criarConta()" class="conta-form">
+    <div class="form-group">
+      <label for="numeroConta">Número da Conta</label>
+      <input
+        id="numeroConta"
+        type="number"
+        [(ngModel)]="novaConta.numeroConta"
+        name="numeroConta"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="agencia">Agência</label>
+      <input
+        id="agencia"
+        type="number"
+        [(ngModel)]="novaConta.agencia"
+        name="agencia"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="saldo">Saldo</label>
+      <input
+        id="saldo"
+        type="number"
+        [(ngModel)]="novaConta.saldo"
+        name="saldo"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn-submit">Criar Conta</button>
+  </form>
+
+  <!-- Lista de contas -->
+  <div class="conta-list">
+    <h2>Lista de Contas Criadas</h2>
+
+    <div *ngFor="let conta of contas" class="conta-card">
+      <h3>Conta: {{ conta.numeroConta }}</h3>
+      <p><strong>Agência:</strong> {{ conta.agencia }}</p>
+      <p><strong>Saldo:</strong> {{ conta.saldo | currency }}</p>
+
+      <!-- Botões de ação para cada conta -->
+      <button type="button" (click)="editarConta(conta)" class="btn-edit">Editar</button>
+      <button type="button" (click)="excluirConta(conta.numeroConta)" class="btn-delete">Excluir</button>
+      <button type="button" (click)="gerarPDF(conta)" class="btn-generate-pdf">Gerar PDF</button>
+    </div>
+  </div>
+
+  <!-- Formulário de edição de conta -->
+  <div *ngIf="contaParaEdicao" class="editar-conta">
+    <h2>Editar Conta</h2>
+    <form (ngSubmit)="atualizarConta()" class="conta-form">
+      <div class="form-group">
+        <label for="editarNumeroConta">Número da Conta</label>
+        <input
+          id="editarNumeroConta"
+          type="number"
+          [(ngModel)]="contaParaEdicao.numeroConta"
+          name="editarNumeroConta"
+          required
+          readonly
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="editarAgencia">Agência</label>
+        <input
+          id="editarAgencia"
+          type="number"
+          [(ngModel)]="contaParaEdicao.agencia"
+          name="editarAgencia"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="editarSaldo">Saldo</label>
+        <input
+          id="editarSaldo"
+          type="number"
+          [(ngModel)]="contaParaEdicao.saldo"
+          name="editarSaldo"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn-submit">Salvar Alterações</button>
+      <button type="button" (click)="contaParaEdicao = null" class="btn-cancel">Cancelar</button>
+    </form>
+  </div>
+</div>

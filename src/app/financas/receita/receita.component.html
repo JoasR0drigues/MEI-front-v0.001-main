@@ -1,0 +1,72 @@
+<div class="container">
+    <h2>Gerenciamento de Receitas</h2>
+  
+    <!-- Formulário para criar uma nova receita -->
+    <div>
+      <h3>Nova Receita</h3>
+      <form (ngSubmit)="criarReceita()">
+        <div class="form-group">
+          <label for="data">Data</label>
+          <input [(ngModel)]="novaReceita.date" name="data" class="form-control" type="date" type="datetime-local" required />
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor</label>
+          <input [(ngModel)]="novaReceita.valorReceita" name="valorReceita" class="form-control" type="number" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <input [(ngModel)]="novaReceita.descricao" name="descricao" class="form-control" type="text" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Adicionar Receita</button>
+      </form>
+    </div>
+  
+    <!-- Lista de receitas -->
+    <div *ngIf="receitas.length > 0" class="mt-4">
+      <h3>Lista de Receitas</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let receita of receitas">
+            <td>{{ receita.date | date }}</td>
+            <td>{{ receita.valorReceita | currency }}</td>
+            <td>{{ receita.descricao }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" (click)="editarReceita(receita)">Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="excluirReceita(receita.idReceita)">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Formulário para editar receita -->
+    <div *ngIf="receitaParaEdicao" class="mt-4">
+      <h3>Editar Receita</h3>
+      <form (ngSubmit)="atualizarReceita()">
+        <div class="form-group">
+          <label for="data">Data</label>
+          <input [(ngModel)]="receitaParaEdicao.date" name="data" class="form-control" type="date" required />
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor</label>
+          <input [(ngModel)]="receitaParaEdicao.valorReceita" name="valor" class="form-control" type="number" required />
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <input [(ngModel)]="receitaParaEdicao.descricao" name="descricao" class="form-control" type="text" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Atualizar Receita</button>
+        <button type="button" class="btn btn-secondary" (click)="receitaParaEdicao = null">Cancelar</button>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,92 @@
+<div class="container">
+  <h1>Gerenciamento de Agendas</h1>
+
+  <div *ngIf="mensagemErro" class="alert alert-danger">
+    {{ mensagemErro }}
+  </div>
+
+  <form (ngSubmit)="criarAgenda()" class="agenda-form">
+    <div class="form-group">
+      <label for="titulo">Título do Serviço</label>
+      <input id="titulo" type="text" [(ngModel)]="novaAgenda.titulo_do_servico" name="titulo_do_servico" required />
+    </div>
+
+    <div class="form-group">
+      <label for="telefone">Telefone</label>
+      <input id="telefone" type="text" [(ngModel)]="novaAgenda.telefone" name="telefone" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="novaAgenda.email" name="email" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inicio">Data e Hora de Início</label>
+      <input id="inicio" type="datetime-local" [(ngModel)]="novaAgenda.data_e_hora_inicio" name="data_e_hora_inicio" required />
+    </div>
+
+    <div class="form-group">
+      <label for="fim">Data e Hora de Fim</label>
+      <input id="fim" type="datetime-local" [(ngModel)]="novaAgenda.data_e_hora_fim" name="data_e_hora_fim" required />
+    </div>
+
+    <div class="form-group">
+      <label for="observacao">Observação</label>
+      <textarea id="observacao" [(ngModel)]="novaAgenda.observacao" name="observacao"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="cpf">CPF do Cliente</label>
+      <input id="cpf" type="text" #cpfInput placeholder="Digite o CPF" />
+      <button type="button" (click)="buscarClientePorCPF(cpfInput.value)">Buscar Cliente</button>
+    </div>
+
+    <div class="form-group">
+      <label>Dados do Cliente</label>
+      <p><strong>Nome:</strong> {{ cliente.nome }}</p>
+      <p><strong>Telefone:</strong> {{ cliente.telefoneResidencial }}</p>
+      <p><strong>Email:</strong> {{ cliente.email }}</p>
+    
+      <label>Endereço</label>
+      <p><strong>Logradouro:</strong> {{ cliente.endereco.logradouro }}</p>
+      <p><strong>Número:</strong> {{ cliente.endereco.numero }}</p>
+      <p><strong>Bairro:</strong> {{ cliente.endereco.bairro }}</p>
+      <p><strong>Localidade:</strong> {{ cliente.endereco.localidade }}</p>
+      <p><strong>UF:</strong> {{ cliente.endereco.uf }}</p>
+      <p><strong>CEP:</strong> {{ cliente.endereco.cep }}</p>
+      <p><strong>Complemento:</strong> {{ cliente.endereco.complemento || 'Não informado' }}</p>
+      <p><strong>Código:</strong> {{ cliente.endereco.codigo || 'Não informado' }}</p>
+    </div>
+
+    <button type="submit" class="btn-submit">Criar Agenda</button>
+  </form>
+
+  <div class="agenda-list">
+    <h2>Lista de Agendas Criadas</h2>
+
+    <div *ngFor="let agenda of agendas" class="agenda-card">
+      <h3>{{ agenda.titulo_do_servico }}</h3>
+      <p><strong>Início:</strong> {{ agenda.data_e_hora_inicio | date: 'short' }}</p>
+      <p><strong>Fim:</strong> {{ agenda.data_e_hora_fim | date: 'short' }}</p>
+      <p><strong>Telefone:</strong> {{ agenda.telefone }}</p>
+      <p><strong>Email:</strong> {{ agenda.email }}</p>
+      <p><strong>Observação:</strong> {{ agenda.observacao }}</p>
+      
+      <h4>Endereço</h4>
+      <p><strong>Logradouro:</strong> {{ agenda.endereco?.logradouro || 'Não informado' }}</p>
+      <p><strong>Número:</strong> {{ agenda.endereco?.numero || 'Não informado' }}</p>
+      <p><strong>Bairro:</strong> {{ agenda.endereco?.bairro || 'Não informado' }}</p>
+      <p><strong>Localidade:</strong> {{ agenda.endereco?.localidade || 'Não informado' }}</p>
+      <p><strong>UF:</strong> {{ agenda.endereco?.uf || 'Não informado' }}</p>
+      <p><strong>CEP:</strong> {{ agenda.endereco?.cep || 'Não informado' }}</p>
+      <p><strong>Complemento:</strong> {{ agenda.endereco?.complemento || 'Não informado' }}</p>
+      <p><strong>Código:</strong> {{ agenda.endereco?.codigo || 'Não informado' }}</p>
+      
+      <!-- Botão para gerar PDF apenas para este agendamento -->
+      <button type="button" (click)="gerarPDF(agenda)" class="btn-generate-pdf">Gerar PDF</button>
+    </div>
+</div>
+
+  </div>
+
