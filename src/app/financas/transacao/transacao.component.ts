@@ -1,71 +1,49 @@
-import { Component, OnInit } from '@angular/core';
-import { TransacaoService } from '../../servicos/transacao.service';
-import { Transacao } from '../../modelo/Transacao';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-transacao',
   templateUrl: './transacao.component.html',
   styleUrls: ['./transacao.component.css']
 })
-export class TransacaoComponent implements OnInit {
-atualizeTransacao(arg0: Transacao) {
-throw new Error('Method not implemented.');
-}
-cadastrarTransacao(): void {
-  this.transacaoService.cadastrarTransacao(this.transacao).subscribe(
-    (novaTransacao) => {
-      this.transacoes.push(novaTransacao); // Adiciona a nova transação à lista
-      this.transacao = new Transacao(); // Limpa o formulário para uma nova entrada
-    },
-    
-  );
-}
+export class TransacaoComponent {
+  transacao = {
+    codigoTransacao: 0,
+    date: '',
+    valor: 0,
+    descricao: '',
+    conta: '',
+    receita: true, // true para receita, false para despesa
+  };
 
-deletarTransacao(arg0: number) {
-throw new Error('Method not implemented.');
-}
-  transacoes: Transacao[] = [];
-  transacao = {} as Transacao;
+  transacoes: any[] = [];
 
-  constructor(private transacaoService: TransacaoService) {}
-
-  ngOnInit(): void {
-    this.carregarTransacoes();
+  adicionarReceita() {
+    this.transacao.receita = true;
+    this.cadastrarTransacao();
   }
 
-  carregarTransacoes(): void {
-    this.transacaoService.getTransacoes().subscribe(
-      (data) => (this.transacoes = data),
-      (error) => console.error('Erro ao carregar transações', error)
-    );
+  adicionarDespesa() {
+    this.transacao.receita = false;
+    this.cadastrarTransacao();
   }
 
-  adicionarTransacao(): void {
-    this.transacaoService.cadastrarTransacao(this.transacao).subscribe(
-      (novaTransacao) => {
-        this.transacoes.push(novaTransacao);
-        this.transacao = {} as Transacao;
-      },
-      (error) => console.error('Erro ao adicionar transação', error)
-    );
+  cadastrarTransacao() {
+    this.transacoes.push({ ...this.transacao });
+    this.transacao = {
+      codigoTransacao: 0,
+      date: '',
+      valor: 0,
+      descricao: '',
+      conta: '',
+      receita: true,
+    };
   }
 
-  atualizarTransacao(): void {
-    if (this.transacao.codigoTransacao) {
-      this.transacaoService.atualizarTransacao(this.transacao).subscribe(
-        (transacaoAtualizada) => {
-          const index = this.transacoes.findIndex(t => t.codigoTransacao === transacaoAtualizada.codigoTransacao);
-          if (index !== -1) this.transacoes[index] = transacaoAtualizada;
-        },
-        (error) => console.error('Erro ao atualizar transação', error)
-      );
-    }
+  deletarTransacao(index: number) {
+    this.transacoes.splice(index, 1);
   }
 
-  removerTransacao(id: number): void {
-    this.transacaoService.deletarTransacao(id).subscribe(
-      () => this.transacoes = this.transacoes.filter(t => t.codigoTransacao !== id),
-      (error) => console.error('Erro ao remover transação', error)
-    );
+  editarTransacao(index: number) {
+    this.transacao = { ...this.transacoes[index] };
   }
 }

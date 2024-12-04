@@ -7,7 +7,7 @@ export class Transacao {
   date!: Date | 'dd/MM/yyyy HH:mm' ;  
   valor!: number;  
   descricao!: string;
-  receita!: Receita | "null";  
-  despesa!: Despesa | "null";  
+  receita!: boolean;  
+  despesa!: boolean;  
   conta!: Conta;  
 }
